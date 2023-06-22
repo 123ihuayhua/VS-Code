@@ -4,7 +4,7 @@ import mysql.connector
 host = 'localhost'
 port = 3306
 user = 'root'
-password = 'lm10kayca'
+password = '' #pongan su contra
 database = 'hotel'
 
 # Función para establecer la conexión a la base de datos
