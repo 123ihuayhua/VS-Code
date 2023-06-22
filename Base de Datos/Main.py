@@ -1,5 +1,5 @@
 from db import *
-from Admin import *
+from Turno_admin import *
 
 # Establecer la conexión a la base de datos
 conexion = establecer_conexion()
