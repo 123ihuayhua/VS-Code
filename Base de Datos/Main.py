@@ -19,6 +19,6 @@ if conexion is not None:
 
 
     # Seleccionar registros de la tabla turno_admin
-    seleccionar_turno_admin(conexion)
+    #seleccionar_turno_admin(conexion)
 
 cerrar_conexion(conexion)
