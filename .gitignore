@@ -2,3 +2,17 @@
 .vscode/launch.json
 .vscode/settings.json
 .vscode/tasks.json
+venv
+Base de Datos/__pycache__/
+Admin.py
+Boleta_cab.py
+Boleta_det.py
+Cliente.py
+Consumo.py
+Hab_Categoria.py
+Habitacion.py
+Hotel.py
+Producto.py
+Renta.py
+Reserva.py
+Turno_admin.py
