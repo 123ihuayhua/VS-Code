@@ -4,7 +4,7 @@ from db import *
 def insertar_huesped(conexion, hue_cod, hue_dni, hue_ape_pat, hue_ape_mat, hue_nom, hue_tel, hue_est_reg):
     try:
         cursor = conexion.cursor()
-        sql = "INSERT INTO huesped (HueCod, HueDNI, HueApePat, HueApeMat, HueNom, HuerTel, HueEstReg) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO HUESPED (HueCod, HueDNI, HueApePat, HueApeMat, HueNom, HuerTel, HueEstReg) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
         valores = (hue_cod, hue_dni, hue_ape_pat, hue_ape_mat, hue_nom, hue_tel, hue_est_reg)
         cursor.execute(sql, valores)
         conexion.commit()
@@ -16,7 +16,7 @@ def insertar_huesped(conexion, hue_cod, hue_dni, hue_ape_pat, hue_ape_mat, hue_n
 def seleccionar_huesped(conexion):
     try:
         cursor = conexion.cursor()
-        cursor.execute("SELECT * FROM huesped")
+        cursor.execute("SELECT * FROM HUESPED")
         registros = cursor.fetchall()
         print("Registros en la tabla huesped:")
         for registro in registros:
@@ -28,7 +28,7 @@ def seleccionar_huesped(conexion):
 def actualizar_huesped(conexion, hue_cod, hue_dni, hue_ape_pat, hue_ape_mat, hue_nom, hue_tel, hue_est_reg):
     try:
         cursor = conexion.cursor()
-        sql = "UPDATE huesped SET HueDNI = %s, HueApePat = %s, HueApeMat = %s, HueNom = %s, HuerTel = %s, HueEstReg = %s, WHERE HueCod = %s"
+        sql = "UPDATE HUESPED SET HueDNI = %s, HueApePat = %s, HueApeMat = %s, HueNom = %s, HuerTel = %s, HueEstReg = %s, WHERE HueCod = %s"
         valores = (hue_cod, hue_dni, hue_ape_pat, hue_ape_mat, hue_nom, hue_tel, hue_est_reg)
         cursor.execute(sql, valores)
         conexion.commit()
@@ -40,7 +40,7 @@ def actualizar_huesped(conexion, hue_cod, hue_dni, hue_ape_pat, hue_ape_mat, hue
 def eliminar_cliente(conexion, hue_cod):
     try:
         cursor = conexion.cursor()
-        sql = "DELETE FROM huesped WHERE HueCod = %s"
+        sql = "DELETE FROM HUESPED WHERE HueCod = %s"
         valor = (hue_cod)
         cursor.execute(sql, valor)
         conexion.commit()
