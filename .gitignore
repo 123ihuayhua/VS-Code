@@ -3,16 +3,16 @@
 .vscode/settings.json
 .vscode/tasks.json
 venv
-Base de Datos/__pycache__/
-Base de Datos/Admin.py
-Base de Datos/Boleta_cab.py
-Base de Datos/Boleta_det.py
-Base de Datos/Cliente.py
-Base de Datos/Consumo.py
-Base de Datos/Hab_Categoria.py
-Base de Datos/Habitacion.py
-Base de Datos/Hotel.py
-Base de Datos/Producto.py
-Base de Datos/Renta.py
-Base de Datos/Reserva.py
-Base de Datos/Turno_admin.py
+'Base de Datos'/__pycache__/
+'Base de Datos'/Admin.py
+'Base de Datos'/Boleta_cab.py
+'Base de Datos'/Boleta_det.py
+'Base de Datos'/Cliente.py
+'Base de Datos'/Consumo.py
+'Base de Datos'/Hab_Categoria.py
+'Base de Datos'/Habitacion.py
+'Base de Datos'/Hotel.py
+'Base de Datos'/Producto.py
+'Base de Datos'/Renta.py
+'Base de Datos'/Reserva.py
+'Base de Datos'/Turno_admin.py
