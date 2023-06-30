@@ -1,4 +1,5 @@
 from flet import *
+import flet as ft
 import mysql.connector
 
 #Conexión BD
@@ -6,12 +7,14 @@ mydb = mysql.connector.connect(
     host = 'localhost',
     user = 'root',
     port = 3306,
-    password = '12345', #contraseña
+    password = 'lm10kayca', #contraseña
     database = 'hotel'
 )
 cursor = mydb.cursor()
-
 def main(page:Page):
+    page.scroll = "always"
+    page.update()
+    #Agregar 
     codtxt = TextField(label="Código")
     dnitxt = TextField(label="DNI")
     apeptxt = TextField(label="Apellido Paterno")
@@ -123,6 +126,87 @@ def main(page:Page):
         page.dialog = dialog
         dialog.open = True
         page.update()
+    
+    #Animación
+    def toggle_icon_button(e):
+        e.control.selected = not e.control.selected
+        e.control.update()
+        
+        if e.control.selected:
+            inactbtn(e)
+        else:
+            actbtn(e)
+        
+        e.control.update()
+
+    #Activar Registro
+    def actbtn(e):
+        try:
+            sql = "UPDATE huesped SET HueEstReg = %s WHERE HueCod = %s"
+            val = ('A', e.control.data['HueCod'])
+            cursor.execute(sql, val)
+            mydb.commit()
+            print("Registro Activado")
+            page.update()
+            
+            mydt.rows.clear()
+            load_data()
+            page.snack_bar = SnackBar(
+                Text("Registro Activado", size=15),
+                bgcolor="skyblue",
+            )
+            page.snack_bar.open = True
+            page.update()
+
+        except Exception as e:
+            print(e)
+            print("Error al activar registro!")
+
+    #Desactivar registro
+    def inactbtn(e):
+        try:
+            sql = "UPDATE huesped SET HueEstReg = %s WHERE HueCod = %s"
+            val = ('I', e.control.data['HueCod'])
+            cursor.execute(sql, val)
+            mydb.commit()
+            print("Registro Inactivado")
+            page.update()
+            
+            mydt.rows.clear()
+            load_data()
+            page.snack_bar = SnackBar(
+                Text("Registro Inactivado", size=15),
+                bgcolor="gray",
+            )
+            page.snack_bar.open = True
+            page.update()
+
+        except Exception as e:
+            print(e)
+            print("Error al inactivar registro!")
+    
+    #Eliminado lógico
+    def dellog(e):
+        try:
+            sql = "UPDATE huesped SET HueEstReg = %s WHERE HueCod = %s"
+            val = ('*', e.control.data['HueCod'])
+            cursor.execute(sql, val)
+            mydb.commit()
+            print("Eliminado lógico correcto")
+            page.update()
+            
+            mydt.rows.clear()
+            load_data()
+            page.snack_bar = SnackBar(
+                Text("Registro Eliminado Lógicamente", size=15),
+                bgcolor="purple",
+            )
+            page.snack_bar.open = True
+            page.update()
+
+        except Exception as e:
+            print(e)
+            print("Error al eliminar!")
 
     def load_data():
         #Obtener datos de la bd
@@ -152,6 +236,22 @@ def main(page:Page):
                                 IconButton("create", icon_color='blue',
                                         data=row,
                                         on_click=createbtn),
+                                IconButton("check_box", icon_color='green',
+                                        data=row,
+                                        on_click=actbtn),
+                                IconButton("check_box_outline_blank", icon_color='green',
+                                        data=row,
+                                        on_click=inactbtn),
+                                IconButton("stars", icon_color='yellow',
+                                        data=row,
+                                        on_click=dellog),
+                                # ft.IconButton(
+                                #     icon = ft.icons.CHECK_BOX,
+                                #     selected_icon = ft.icons.CHECK_BOX_OUTLINE_BLANK,
+                                #     on_click=toggle_icon_button,
+                                #     selected= False,
+                                #     style=ft.ButtonStyle(color={"selected": ft.colors.RED, "": ft.colors.GREEN}),
+                                #)
                             ])
                         )
                     ]
@@ -195,13 +295,46 @@ def main(page:Page):
         teltxt.value = "" 
         esttxt.value = ""
         page.update()
+    
+    #Cancelar registro
+    def cancelIn(e):
+        try:
+            codtxt.value = ""
+            dnitxt.value = "" 
+            apeptxt.value = "" 
+            apemtxt.value = "" 
+            nametxt.value = "" 
+            teltxt.value = "" 
+            esttxt.value = ""
+            page.update()
+            mydt.rows.clear()
+            load_data()
+            page.snack_bar = SnackBar(
+                    Text("Registro Cancelado", size=15),
+                    bgcolor="yellow",
+                )
+            page.snack_bar.open = True
+            page.update()
 
+        except Exception as e:
+            print(e)
+            print("Error en el código")
+
+    #Funcióm scrollbar
+    def scrollfuc(e:OnScrollEvent):
+        print(e)
+    
+    
     page.add(
         Column([
             codtxt, dnitxt, apeptxt, apemtxt, nametxt, teltxt, esttxt,
-            ElevatedButton("AGREGAR", on_click=addtodb),
-            mydt
-        ])
+            Row([
+                ElevatedButton("AGREGAR", on_click=addtodb),
+                ElevatedButton("CANCELAR", on_click=cancelIn),
+            ]),
+            mydt,
+            ], 
+        ),
     )
     
 flet.app(target=main)
