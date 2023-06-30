@@ -263,6 +263,10 @@ def main(page:Page):
             return [IconButton("check_box", icon_color='green',
                                         data=row,
                                         on_click=actbtn)]
+        elif (row['RenEstReg'] == '*'):
+            return [IconButton("delete", icon_color='red',
+                                        data=row,
+                                        on_click=deletebtn)]
 
         return [IconButton("delete", icon_color='red',
                                         data=row,
