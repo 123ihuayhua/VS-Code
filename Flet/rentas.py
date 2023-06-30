@@ -47,6 +47,7 @@ def main(page:Page):
 
     edit_esttxt = Dropdown(
             label="Estado de Registro",
+            disabled=True,
             value="A",
             options=[
                 dropdown.Option("A"),
@@ -113,7 +114,7 @@ def main(page:Page):
             edit_year2txt.value = ""
             edit_mes2txt.value = ""
             edit_dia2txt.value = ""
-            edit_esttxt.value = Dropdown(
+            edit_esttxt.value = "A", Dropdown(
             label="Estado de Registro",
             value="A",
             options=[
@@ -173,7 +174,7 @@ def main(page:Page):
             edit_year2txt.value = ""
             edit_mes2txt.value = ""
             edit_dia2txt.value = ""
-            edit_esttxt.value = Dropdown(
+            edit_esttxt.value = "A", Dropdown(
             label="Estado de Registro",
             value="A",
             options=[
@@ -227,18 +228,6 @@ def main(page:Page):
         page.dialog = dialog
         dialog.open = True
         page.update()
-    
-    # #Animación
-    # def toggle_icon_button(e):
-    #     e.control.selected = not e.control.selected
-    #     e.control.update()
-        
-    #     if e.control.selected:
-    #         inactbtn(e)
-    #     else:
-    #         actbtn(e)
-        
-    #     e.control.update()
 
     #Activar Registro
     def actbtn(e):
@@ -370,7 +359,7 @@ def main(page:Page):
         year2txt.value = ""
         mes2txt.value = ""
         dia2txt.value = ""
-        esttxt.value = Dropdown(
+        esttxt.value = "A", Dropdown(
             label="Estado de Registro",
             value="A",
             options=[
@@ -390,7 +379,7 @@ def main(page:Page):
             year2txt.value = ""
             mes2txt.value = ""
             dia2txt.value = ""
-            esttxt.value = Dropdown(
+            esttxt.value = "A" , Dropdown(
             label="Estado de Registro",
             value="A",
             options=[
