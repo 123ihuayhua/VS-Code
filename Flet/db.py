@@ -14,14 +14,23 @@ cursor = mydb.cursor()
 def main(page:Page):
     page.scroll = "always"
     page.update()
+
     #Agregar 
-    codtxt = TextField(label="Código")
+    codtxt = TextField(label="Código", )
     dnitxt = TextField(label="DNI")
     apeptxt = TextField(label="Apellido Paterno")
     apemtxt = TextField(label="Apellido Materno")
     nametxt = TextField(label="Nombre")
     teltxt = TextField(label="Teléfono")
-    esttxt = TextField(label="Estado de Registro")
+    # esttxt = TextField(label="Estado de Registro", value="A")
+    esttxt = Dropdown(
+            label="Estado de Registro",
+            value="A",
+            options=[
+                dropdown.Option("A"),
+                dropdown.Option("I")
+            ]
+    )
 
     #Editar 
     edit_codtxt = TextField(label="Código")
@@ -30,7 +39,15 @@ def main(page:Page):
     edit_apemtxt = TextField(label="Apellido Materno")
     edit_nametxt = TextField(label="Nombre")
     edit_teltxt = TextField(label="Teléfono")
-    edit_esttxt = TextField(label="Estado de Registro")
+    # edit_esttxt = TextField(label="Estado de Registro")
+    edit_esttxt = Dropdown(
+            label="Estado de Registro",
+            value="A",
+            options=[
+                dropdown.Option("A"),
+                dropdown.Option("I")
+            ]
+    )
 
     mydt = DataTable(
         columns=[
@@ -101,6 +118,33 @@ def main(page:Page):
             print(e)
             print("Error al guardar edit!")
     
+    #Cancelar registro
+    def cancelform(e):
+        try:
+            dialog.open = False
+            page.update()
+            #Limipiar campos
+            edit_codtxt.value = ""
+            edit_dnitxt.value = ""         
+            edit_apeptxt.value = ""
+            edit_apemtxt.value = ""
+            edit_nametxt.value = ""          
+            edit_teltxt.value = ""          
+            edit_esttxt.value = ""
+
+            mydt.rows.clear()
+            load_data()
+            page.snack_bar = SnackBar(
+                Text("Actualización Cancelada", size=15),
+                bgcolor="yellow",
+            )
+            page.snack_bar.open = True
+            page.update()
+
+        except Exception as e:
+            print(e)
+            print("Error al cancelar edit!")
+
     #Cuadro de diálogo
     dialog = AlertDialog(
         title=Text("Edit Data"),
@@ -112,9 +156,11 @@ def main(page:Page):
             edit_teltxt,
             edit_esttxt,]),
         actions=[
-            TextButton("Guardado", on_click=savedata)]
+            ft.TextButton("Guardado", on_click = savedata),
+            ft.TextButton("Cancelar", on_click = cancelform),
+            ]
     )
-    
+
     def createbtn(e):
         edit_codtxt.value  = e.control.data['HueCod']
         edit_dnitxt.value = e.control.data['HueDNI']
@@ -127,21 +173,12 @@ def main(page:Page):
         dialog.open = True
         page.update()
     
-    #Animación
-    def toggle_icon_button(e):
-        e.control.selected = not e.control.selected
-        e.control.update()
-        
-        if e.control.selected:
-            inactbtn(e)
-        else:
-            actbtn(e)
-        
-        e.control.update()
 
     #Activar Registro
     def actbtn(e):
         try:
+            if e.control.data is None:
+                raise ValueError("Event object is None")
             sql = "UPDATE huesped SET HueEstReg = %s WHERE HueCod = %s"
             val = ('A', e.control.data['HueCod'])
             cursor.execute(sql, val)
@@ -159,9 +196,8 @@ def main(page:Page):
             page.update()
 
         except Exception as e:
-            print(e)
-            print("Error al activar registro!")
-
+            print(f"Error al activar registro: {str(e)}")
+            
     #Desactivar registro
     def inactbtn(e):
         try:
@@ -180,6 +216,7 @@ def main(page:Page):
             )
             page.snack_bar.open = True
             page.update()
+            
 
         except Exception as e:
             print(e)
@@ -194,7 +231,6 @@ def main(page:Page):
             mydb.commit()
             print("Eliminado lógico correcto")
             page.update()
-            
             mydt.rows.clear()
             load_data()
             page.snack_bar = SnackBar(
@@ -208,6 +244,7 @@ def main(page:Page):
             print(e)
             print("Error al eliminar!")
 
+
     def load_data():
         #Obtener datos de la bd
         cursor.execute("SELECT * FROM huesped")
@@ -218,6 +255,13 @@ def main(page:Page):
 
         #Bucle de pusheo 
         for row in rows:
+            #Botones
+            eliminar = ft.IconButton("delete", data=row, icon_color='red', on_click=deletebtn)
+            editar = ft.IconButton("create", data=row, icon_color='blue', on_click=createbtn)
+            reactivar = ft.IconButton("check_box", data=row, icon_color='green', on_click=actbtn)
+            inactivar = ft.IconButton("check_box_outline_blank", data=row, icon_color='green', on_click=inactbtn)
+            eliminadolog = ft.IconButton("stars", data=row, icon_color='yellow', on_click=dellog)
+            
             mydt.rows.append(
                 DataRow(
                     cells=[
@@ -229,36 +273,14 @@ def main(page:Page):
                         DataCell(Text(row['HuerTel'])),
                         DataCell(Text(row['HueEstReg'])),
                         DataCell(
-                            Row([
-                                IconButton("delete", icon_color='red',
-                                        data=row,
-                                        on_click=deletebtn),
-                                IconButton("create", icon_color='blue',
-                                        data=row,
-                                        on_click=createbtn),
-                                IconButton("check_box", icon_color='green',
-                                        data=row,
-                                        on_click=actbtn),
-                                IconButton("check_box_outline_blank", icon_color='green',
-                                        data=row,
-                                        on_click=inactbtn),
-                                IconButton("stars", icon_color='yellow',
-                                        data=row,
-                                        on_click=dellog),
-                                # ft.IconButton(
-                                #     icon = ft.icons.CHECK_BOX,
-                                #     selected_icon = ft.icons.CHECK_BOX_OUTLINE_BLANK,
-                                #     on_click=toggle_icon_button,
-                                #     selected= False,
-                                #     style=ft.ButtonStyle(color={"selected": ft.colors.RED, "": ft.colors.GREEN}),
-                                #)
+                            Row([ 
+                                eliminar, editar, reactivar, inactivar, eliminadolog
                             ])
                         )
-                    ]
+                    ] 
                 )
             )
             page.update()
-
 
     #Llamar función cuando la aplicación está abierta
     load_data()
@@ -319,11 +341,6 @@ def main(page:Page):
         except Exception as e:
             print(e)
             print("Error en el código")
-
-    #Funcióm scrollbar
-    def scrollfuc(e:OnScrollEvent):
-        print(e)
-    
     
     page.add(
         Column([
