@@ -1,6 +1,16 @@
+import time
 from flet import *
 import flet as ft
 import mysql.connector
+from flet import *
+from algoliasearch.search_client import SearchClient
+
+#Algoria 
+myAppId = "HBMSNK3UNX"
+myKEYID = "6f3ec3d08d46472d847626ef5611ac89"
+
+client = SearchClient.create(myAppId,myKEYID)
+index = client.init_index("Navi")
 
 #Conexión BD
 mydb = mysql.connector.connect(
@@ -11,6 +21,8 @@ mydb = mysql.connector.connect(
     database = 'HOTEL'
 )
 cursor = mydb.cursor()
+
+#Estructura
 def main(page:Page):
     page.scroll = "always"
     page.update()
@@ -71,30 +83,7 @@ def main(page:Page):
         ], 
         rows=[]
     )
-
-    #Eliminar elementos
-    # def deletebtn(e):
-    #     print("El código seleccionado es: ", e.control.data['RenCod'])
-    #     try:
-    #         sql = "DELETE FROM RENTA WHERE RenCod = %s"
-    #         val = (e.control.data['RenCod'],)
-    #         cursor.execute(sql,val)
-    #         mydb.commit()
-
-    #         print("Renta Eliminada")
-    #         mydt.rows.clear()
-    #         load_data()
-    #         page.snack_bar = SnackBar(
-    #             Text("Dato eliminado", size=15),
-    #             bgcolor="red",
-    #         )
-    #         page.snack_bar.open = True
-    #         page.update()
-
-    #     except Exception as e:
-    #         print(e)
-    #         print("Error en el código para eliminar")
-
+    
     #Boton Guardado
     def savedata(e):
         try:
@@ -307,6 +296,8 @@ def main(page:Page):
             )
             page.update()
 
+        
+
     def load_icons(row):
         if (row['RenEstReg'] == 'I'):
             return [IconButton("check_box", icon_color='green',
@@ -401,7 +392,40 @@ def main(page:Page):
             print(e)
             print("Error en el código")
     
+    #Color thema defecto 
+    page.theme_mode = "light"
+    page.splash = ProgressBar(visible=False)
+
+    #Funcion cambio de tema
+    def changetheme(e):
+        page.splash.visible = True
+        page.theme_mode = "light" if page.theme_mode == "dark" else "dark"
+        page.update()
+
+        #Tiempo espera
+        time.sleep(0.5)
+        toggledarklight.selected = not toggledarklight.selected
+        page.splash.visible = False
+        page.update()
+
+    #Cambio de dark/light
+    toggledarklight = IconButton(
+        on_click = changetheme,
+        icon = "dark_mode",
+        selected_icon = "light_mode",
+        style = ButtonStyle(
+            color = {"":colors.BLACK, "selected":colors.WHITE}
+        )
+    )
+
+    #Main
     page.add(
+        AppBar(
+            title = Text("TABLA RENTAS", size = 30),
+            bgcolor = "teal",
+            leading = IconButton(icon="menu"),
+            actions = [toggledarklight]
+        ),
         Column([
             codtxt, rentatxt, yeartxt, mestxt, diatxt, year2txt, mes2txt, dia2txt, esttxt,
             Row([
