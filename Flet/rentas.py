@@ -7,14 +7,13 @@ mydb = mysql.connector.connect(
     host = 'localhost',
     user = 'root',
     port = 3306,
-    password = 'anthony23', #contraseña
+    password = 'lm10kayca', #contraseña
     database = 'HOTEL'
 )
 cursor = mydb.cursor()
 def main(page:Page):
     page.scroll = "always"
     page.update()
-<<<<<<< HEAD
     #Agregar RENTA
     codtxt = TextField(label="Código")
     rentatxt = TextField(label="Renta")#DNI dnitxt
@@ -26,10 +25,17 @@ def main(page:Page):
     mes2txt = TextField(label="Mes final")#apemtxt
     dia2txt = TextField(label="Dia final")#nametxt
 
-    esttxt = TextField(label="Estado de Registro")
+    esttxt = Dropdown(
+            label="Estado de Registro",
+            value="A",
+            options=[
+                dropdown.Option("A"),
+                dropdown.Option("I")
+            ]
+    )
 
     #Editar 
-    edit_codtxt = TextField(label="Código")
+    edit_codtxt = TextField(label="Código", disabled=True)
     edit_rentatxt = TextField(label="Renta")#DNI dnitxt
     edit_yeartxt = TextField(label="Año actual")#apeptxt 
     edit_mestxt = TextField(label="Mes actual")#apemtxt
@@ -39,9 +45,16 @@ def main(page:Page):
     edit_mes2txt = TextField(label="Mes final")#apemtxt
     edit_dia2txt = TextField(label="Dia final")#nametxt
 
-    edit_esttxt = TextField(label="Estado de Registro")
+    edit_esttxt = Dropdown(
+            label="Estado de Registro",
+            disabled=True,
+            value="A",
+            options=[
+                dropdown.Option("A"),
+                dropdown.Option("I")
+            ]
+    )
 #---------
-=======
 
     mydt = DataTable(
         columns=[
@@ -60,27 +73,28 @@ def main(page:Page):
     )
 
     #Eliminar elementos
-    def deletebtn(e):
-        print("El código seleccionado es: ", e.control.data['RenCod'])
-        try:
-            sql = "DELETE FROM RENTA WHERE RenCod = %s"
-            val = (e.control.data['RenCod'],)
-            cursor.execute(sql,val)
-            mydb.commit()
+    # def deletebtn(e):
+    #     print("El código seleccionado es: ", e.control.data['RenCod'])
+    #     try:
+    #         sql = "DELETE FROM RENTA WHERE RenCod = %s"
+    #         val = (e.control.data['RenCod'],)
+    #         cursor.execute(sql,val)
+    #         mydb.commit()
 
-            print("Renta Eliminada")
-            mydt.rows.clear()
-            load_data()
-            page.snack_bar = SnackBar(
-                Text("Dato eliminado", size=15),
-                bgcolor="red",
-            )
-            page.snack_bar.open = True
-            page.update()
+    #         print("Renta Eliminada")
+    #         mydt.rows.clear()
+    #         load_data()
+    #         page.snack_bar = SnackBar(
+    #             Text("Dato eliminado", size=15),
+    #             bgcolor="red",
+    #         )
+    #         page.snack_bar.open = True
+    #         page.update()
 
-        except Exception as e:
-            print(e)
-            print("Error en el código para eliminar")
+    #     except Exception as e:
+    #         print(e)
+    #         print("Error en el código para eliminar")
+
     #Boton Guardado
     def savedata(e):
         try:
@@ -100,7 +114,13 @@ def main(page:Page):
             edit_year2txt.value = ""
             edit_mes2txt.value = ""
             edit_dia2txt.value = ""
-            edit_esttxt.value = ""
+            edit_esttxt.value = "A", Dropdown(
+            label="Estado de Registro",
+            value="A",
+            options=[
+                dropdown.Option("A"),
+                dropdown.Option("I")
+            ])
 
             mydt.rows.clear()
             load_data()
@@ -114,7 +134,8 @@ def main(page:Page):
         except Exception as e:
             print(e)
             print("Error al guardar edit!")
-
+    
+    #Inactivar registro
     def inactbtn(e):
         try:
             sql = "UPDATE RENTA SET RenEstReg = %s WHERE RenCod = %s"
@@ -138,19 +159,28 @@ def main(page:Page):
             print(e)
             print("Error al inactivar registro!")
     
+    
     #Cancelar registro
     def cancelform(e):
         try:
             dialog.open = False
             page.update()
             #Limipiar campos
-            edit_codtxt.value = ""
-            edit_dnitxt.value = ""         
-            edit_apeptxt.value = ""
-            edit_apemtxt.value = ""
-            edit_nametxt.value = ""          
-            edit_teltxt.value = ""          
-            edit_esttxt.value = ""
+            #Limipiar campos
+            edit_rentatxt.value = ""
+            edit_yeartxt.value = ""
+            edit_mestxt.value = ""
+            edit_diatxt.value = ""
+            edit_year2txt.value = ""
+            edit_mes2txt.value = ""
+            edit_dia2txt.value = ""
+            edit_esttxt.value = "A", Dropdown(
+            label="Estado de Registro",
+            value="A",
+            options=[
+                dropdown.Option("A"),
+                dropdown.Option("I")
+            ])
 
             mydt.rows.clear()
             load_data()
@@ -169,20 +199,21 @@ def main(page:Page):
     dialog = AlertDialog(
         title=Text("Edit Data"),
         content=Column([
+            edit_codtxt,
             edit_rentatxt,
             edit_yeartxt,
             edit_mestxt,
             edit_diatxt,
             edit_year2txt,
             edit_mes2txt,
-            edit_dia2txt ]),
+            edit_dia2txt,
+            edit_esttxt ]),
         actions=[
-
-            TextButton("Guardado", on_click=savedata),
-            TextButton("Inactivar", on_click=inactbtn),
-            TextButton("Cancelar", on_click = cancelform)]
+            TextButton("Guardar", on_click=savedata),
+            TextButton("Cancelar", on_click=cancelform),
+            TextButton("Inactivar", on_click=inactbtn)]
     )
-
+    
     def createbtn(e):
         edit_codtxt.value = e.control.data['RenCod']
         edit_rentatxt.value = e.control.data['RenHab']
@@ -197,7 +228,6 @@ def main(page:Page):
         page.dialog = dialog
         dialog.open = True
         page.update()
-    
 
     #Activar Registro
     def actbtn(e):
@@ -219,32 +249,9 @@ def main(page:Page):
             page.update()
 
         except Exception as e:
-            print(f"Error al activar registro: {str(e)}")
-            
-    #Desactivar registro
-
-    def inactbtn(e):
-        try:
-            sql = "UPDATE huesped SET HueEstReg = %s WHERE HueCod = %s"
-            val = ('I', e.control.data['HueCod'])
-            cursor.execute(sql, val)
-            mydb.commit()
-            print("Registro Inactivado")
-            page.update()
-            
-            mydt.rows.clear()
-            load_data()
-            page.snack_bar = SnackBar(
-                Text("Registro Inactivado", size=15),
-                bgcolor="gray",
-            )
-            page.snack_bar.open = True
-            page.update()
-            
-
-        except Exception as e:
             print(e)
-            print("Error al inactivar registro!")
+            print("Error al activar registro!")
+
     
     #Eliminado lógico
     def dellog(e):
@@ -255,6 +262,7 @@ def main(page:Page):
             mydb.commit()
             print("Eliminado lógico correcto")
             page.update()
+            
             mydt.rows.clear()
             load_data()
             page.snack_bar = SnackBar(
@@ -268,7 +276,6 @@ def main(page:Page):
             print(e)
             print("Error al eliminar!")
 
-
     def load_data():
         #Obtener datos de la bd
         cursor.execute("SELECT * FROM RENTA")
@@ -279,13 +286,6 @@ def main(page:Page):
 
         #Bucle de pusheo 
         for row in rows:
-            #Botones
-            eliminar = ft.IconButton("delete", data=row, icon_color='red', on_click=deletebtn)
-            editar = ft.IconButton("create", data=row, icon_color='blue', on_click=createbtn)
-            reactivar = ft.IconButton("check_box", data=row, icon_color='green', on_click=actbtn)
-            inactivar = ft.IconButton("check_box_outline_blank", data=row, icon_color='green', on_click=inactbtn)
-            eliminadolog = ft.IconButton("stars", data=row, icon_color='yellow', on_click=dellog)
-            
             mydt.rows.append(
                 DataRow(
                     cells=[
@@ -302,7 +302,7 @@ def main(page:Page):
                         DataCell(
                             Row(load_icons(row))
                         )
-                    ] 
+                    ]
                 )
             )
             page.update()
@@ -313,13 +313,9 @@ def main(page:Page):
                                         data=row,
                                         on_click=actbtn)]
         elif (row['RenEstReg'] == '*'):
-            return [IconButton("delete", icon_color='red',
-                                        data=row,
-                                        on_click=deletebtn)]
+            return []
 
-        return [IconButton("delete", icon_color='red',
-                                        data=row,
-                                        on_click=deletebtn),
+        return [
             IconButton("create", icon_color='blue',
                                             data=row,
                                             on_click=createbtn),
@@ -363,8 +359,13 @@ def main(page:Page):
         year2txt.value = ""
         mes2txt.value = ""
         dia2txt.value = ""
-        esttxt.value = ""
-
+        esttxt.value = "A", Dropdown(
+            label="Estado de Registro",
+            value="A",
+            options=[
+                dropdown.Option("A"),
+                dropdown.Option("I")
+            ])
         page.update()
     
     #Cancelar registro
@@ -378,7 +379,14 @@ def main(page:Page):
             year2txt.value = ""
             mes2txt.value = ""
             dia2txt.value = ""
-            esttxt.value = ""
+            esttxt.value = "A" , Dropdown(
+            label="Estado de Registro",
+            value="A",
+            options=[
+                dropdown.Option("A"),
+                dropdown.Option("I")
+            ])
+            
             page.update()
             mydt.rows.clear()
             load_data()
