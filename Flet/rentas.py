@@ -7,7 +7,7 @@ mydb = mysql.connector.connect(
     host = 'localhost',
     user = 'root',
     port = 3306,
-    password = 'lm10kayca', #contraseña
+    password = 'anthony23', #contraseña
     database = 'HOTEL'
 )
 cursor = mydb.cursor()
@@ -29,29 +29,29 @@ def main(page:Page):
             label="Estado de Registro",
             value="A",
             options=[
-                dropdown.Option("A"),
-                dropdown.Option("I")
+                dropdown.Option("A")
+                #dropdown.Option("I")
             ]
     )
 
     #Editar 
     edit_codtxt = TextField(label="Código", disabled=True)
-    edit_rentatxt = TextField(label="Renta")#DNI dnitxt
-    edit_yeartxt = TextField(label="Año actual")#apeptxt 
-    edit_mestxt = TextField(label="Mes actual")#apemtxt
-    edit_diatxt = TextField(label="Dia actual")#nametxt
+    edit_rentatxt = TextField(label="Renta")
+    edit_yeartxt = TextField(label="Año actual") 
+    edit_mestxt = TextField(label="Mes actual")
+    edit_diatxt = TextField(label="Dia actual")
 
-    edit_year2txt = TextField(label="Año final")#apeptxt 
-    edit_mes2txt = TextField(label="Mes final")#apemtxt
-    edit_dia2txt = TextField(label="Dia final")#nametxt
+    edit_year2txt = TextField(label="Año final") 
+    edit_mes2txt = TextField(label="Mes final")
+    edit_dia2txt = TextField(label="Dia final")
 
     edit_esttxt = Dropdown(
             label="Estado de Registro",
             disabled=True,
             value="A",
             options=[
-                dropdown.Option("A"),
-                dropdown.Option("I")
+                dropdown.Option("A")
+                #dropdown.Option("I")
             ]
     )
 #---------
@@ -98,8 +98,8 @@ def main(page:Page):
     #Boton Guardado
     def savedata(e):
         try:
-            sql = "UPDATE RENTA SET RenHab = %s, RenFecIniAño = %s, RenFecIniMes = %s, RenFecIniDia = %s, RenFecFinAño = %s, RenFecFinMes = %s, RenFecFinDia = %s, RenEstReg = %s WHERE RenCod = %s"
-            val = (edit_rentatxt.value, edit_yeartxt.value, edit_mestxt.value, edit_diatxt.value, edit_year2txt.value, edit_mes2txt.value, edit_dia2txt.value, edit_esttxt.value, edit_codtxt.value)
+            sql = "UPDATE RENTA SET RenHab = %s, RenFecIniAño = %s, RenFecIniMes = %s, RenFecIniDia = %s, RenFecFinAño = %s, RenFecFinMes = %s, RenFecFinDia = %s WHERE RenCod = %s"
+            val = (edit_rentatxt.value, edit_yeartxt.value, edit_mestxt.value, edit_diatxt.value, edit_year2txt.value, edit_mes2txt.value, edit_dia2txt.value, edit_codtxt.value)
             cursor.execute(sql,val)
             mydb.commit()
             print("Edición exitosa!")
@@ -118,8 +118,8 @@ def main(page:Page):
             label="Estado de Registro",
             value="A",
             options=[
-                dropdown.Option("A"),
-                dropdown.Option("I")
+                dropdown.Option("A")
+                #dropdown.Option("I")
             ])
 
             mydt.rows.clear()
@@ -178,8 +178,8 @@ def main(page:Page):
             label="Estado de Registro",
             value="A",
             options=[
-                dropdown.Option("A"),
-                dropdown.Option("I")
+                dropdown.Option("A")
+                #dropdown.Option("I")
             ])
 
             mydt.rows.clear()
@@ -329,8 +329,8 @@ def main(page:Page):
 
     def addtodb(e):
         try:
-            sql = "INSERT INTO RENTA (RenCod, RenHab, RenFecIniAño, RenFecIniMes, RenFecIniDia, RenFecFinAño, RenFecFinMes, RenFecFinDia, RenEstReg) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            val = (codtxt.value, rentatxt.value, yeartxt.value, mestxt.value, diatxt.value, year2txt.value, mes2txt.value, dia2txt.value, esttxt.value)
+            sql = "INSERT INTO RENTA (RenCod, RenHab, RenFecIniAño, RenFecIniMes, RenFecIniDia, RenFecFinAño, RenFecFinMes, RenFecFinDia) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+            val = (codtxt.value, rentatxt.value, yeartxt.value, mestxt.value, diatxt.value, year2txt.value, mes2txt.value, dia2txt.value)
             cursor.execute(sql, val)
             mydb.commit()
             print(cursor.rowcount, "You record insert!")
@@ -363,8 +363,8 @@ def main(page:Page):
             label="Estado de Registro",
             value="A",
             options=[
-                dropdown.Option("A"),
-                dropdown.Option("I")
+                dropdown.Option("A")
+                #dropdown.Option("I")
             ])
         page.update()
     
@@ -383,8 +383,8 @@ def main(page:Page):
             label="Estado de Registro",
             value="A",
             options=[
-                dropdown.Option("A"),
-                dropdown.Option("I")
+                dropdown.Option("A")
+                #dropdown.Option("I")
             ])
             
             page.update()
