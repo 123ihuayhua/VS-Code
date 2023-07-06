@@ -31,13 +31,13 @@ def main(page: Page):
     mes2txt = TextField(label="Mes final")  # apemtxt
     dia2txt = TextField(label="Dia final")  # nametxt
 
-    esttxt = Dropdown(
-            label="Estado de Registro",
-            value="A",
-            options=[
-                dropdown.Option("A"),
-            ]
-    )
+    # esttxt = Dropdown(
+    #         label="Estado de Registro",
+    #         value="A",
+    #         options=[
+    #             dropdown.Option("A"),
+    #         ]
+    # )
 
     # Editar
     edit_codtxt = TextField(label="Código", disabled=True)
@@ -349,8 +349,8 @@ def main(page: Page):
     #Agregar datos boton
     def addtodb(e):
         try:
-            sql = "INSERT INTO RENTA (RenCod, RenHab, RenFecIniAño, RenFecIniMes, RenFecIniDia, RenFecFinAño, RenFecFinMes, RenFecFinDia, RenEstReg) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            val = (codtxt.value, rentatxt.value, yeartxt.value, mestxt.value, diatxt.value, year2txt.value, mes2txt.value, dia2txt.value, esttxt.value)
+            sql = "INSERT INTO RENTA (RenCod, RenHab, RenFecIniAño, RenFecIniMes, RenFecIniDia, RenFecFinAño, RenFecFinMes, RenFecFinDia) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+            val = (codtxt.value, rentatxt.value, yeartxt.value, mestxt.value, diatxt.value, year2txt.value, mes2txt.value, dia2txt.value, )
             cursor.execute(sql, val)
             mydb.commit()
             print(cursor.rowcount, "You record insert!")
@@ -379,12 +379,12 @@ def main(page: Page):
         year2txt.value = ""
         mes2txt.value = ""
         dia2txt.value = ""
-        esttxt.value = "A", Dropdown(
-            label="Estado de Registro",
-            value="A",
-            options=[
-                dropdown.Option("A"),
-            ])
+        # esttxt.value = "A", Dropdown(
+        #     label="Estado de Registro",
+        #     value="A",
+        #     options=[
+        #         dropdown.Option("A"),
+        #     ])
         page.update()
     
     #Cancelar registro
@@ -399,12 +399,12 @@ def main(page: Page):
             year2txt.value = ""
             mes2txt.value = ""
             dia2txt.value = ""
-            esttxt.value = "A" , Dropdown(
-            label="Estado de Registro",
-            value="A",
-            options=[
-                dropdown.Option("A"),
-            ])
+            # esttxt.value = "A" , Dropdown(
+            # label="Estado de Registro",
+            # value="A",
+            # options=[
+            #     dropdown.Option("A"),
+            # ])
             
             page.update()
             mydt.rows.clear()
@@ -433,7 +433,7 @@ def main(page: Page):
             year2txt,
             mes2txt,
             dia2txt,
-            esttxt
+            # esttxt
         ]),
         actions = [
             TextButton("AGREGAR", on_click=addtodb),
@@ -451,7 +451,7 @@ def main(page: Page):
         year2txt.value = ""
         mes2txt.value = ""
         dia2txt.value = ""
-        esttxt.value = ""
+        # esttxt.value = ""
         page.dialog = dialog2
         dialog2.open = True
         page.update()
