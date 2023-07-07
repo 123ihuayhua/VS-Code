@@ -20,36 +20,15 @@ cursor = mydb.cursor()
 def main(page: Page):
     page.scroll = "always"
     page.update()
-    # Agregar RENTA
+    # Agregar ADMIN_TURNO
     codtxt = TextField(label="Código")
-    rentatxt = TextField(label="Renta")  # DNI dnitxt
-    yeartxt = TextField(label="Año actual")  # apeptxt
-    mestxt = TextField(label="Mes actual")  # apemtxt
-    diatxt = TextField(label="Dia actual")  # nametxt
-
-    year2txt = TextField(label="Año final")  # apeptxt
-    mes2txt = TextField(label="Mes final")  # apemtxt
-    dia2txt = TextField(label="Dia final")  # nametxt
-
-    # esttxt = Dropdown(
-    #         label="Estado de Registro",
-    #         value="A",
-    #         options=[
-    #             dropdown.Option("A"),
-    #         ]
-    # )
+    horenttxt = TextField(label="Hora Entrada")  
+    horsalttxt = TextField(label="Hora Salida")  
 
     # Editar
     edit_codtxt = TextField(label="Código", disabled=True)
-    edit_rentatxt = TextField(label="Renta")  # DNI dnitxt
-    edit_yeartxt = TextField(label="Año actual")  # apeptxt
-    edit_mestxt = TextField(label="Mes actual")  # apemtxt
-    edit_diatxt = TextField(label="Dia actual")  # nametxt
-
-    edit_year2txt = TextField(label="Año final")  # apeptxt
-    edit_mes2txt = TextField(label="Mes final")  # apemtxt
-    edit_dia2txt = TextField(label="Dia final")  # nametxt
-
+    edit_horenttxt = TextField(label="Hora Entrada")  
+    edit_horsalttxt = TextField(label="Hora Salida")  
     edit_esttxt = Dropdown(
             label="Estado de Registro",
             disabled=True,
@@ -63,13 +42,8 @@ def main(page: Page):
     mydt = DataTable(
         columns=[
             DataColumn(Text("Código")),
-            DataColumn(Text("Renta")),
-            DataColumn(Text("Año actual")),
-            DataColumn(Text("Mes actual")),
-            DataColumn(Text("Dia actual")),
-            DataColumn(Text("Año final")),
-            DataColumn(Text("Mes final")),
-            DataColumn(Text("Dia final")),
+            DataColumn(Text("Hora Entrada")),
+            DataColumn(Text("Hora Salida")),
             DataColumn(Text("Estado de Registro")),
             DataColumn(Text("Acciones")),
         ],
@@ -79,9 +53,8 @@ def main(page: Page):
     # Boton Guardado
     def savedata(e):
         try:
-            sql = "UPDATE RENTA SET RenHab = %s, RenFecIniAño = %s, RenFecIniMes = %s, RenFecIniDia = %s, RenFecFinAño = %s, RenFecFinMes = %s, RenFecFinDia = %s, RenEstReg = %s WHERE RenCod = %s"
-            val = (edit_rentatxt.value, edit_yeartxt.value, edit_mestxt.value, edit_diatxt.value,
-                   edit_year2txt.value, edit_mes2txt.value, edit_dia2txt.value, edit_esttxt.value, edit_codtxt.value)
+            sql = "UPDATE TURNO_ADMINISTRADOR SET TurAdmHorEnt = %s, TurAdmHorSal = %s, TurAdmEstReg = %s WHERE TurAdmCod = %s"
+            val = (edit_horenttxt.value, edit_horsalttxt.value, edit_esttxt.value, edit_codtxt.value)
             cursor.execute(sql, val)
             mydb.commit()
             print("Edición exitosa!")
@@ -89,13 +62,8 @@ def main(page: Page):
             page.update()
 
             # Limipiar campos
-            edit_rentatxt.value = ""
-            edit_yeartxt.value = ""
-            edit_mestxt.value = ""
-            edit_diatxt.value = ""
-            edit_year2txt.value = ""
-            edit_mes2txt.value = ""
-            edit_dia2txt.value = ""
+            edit_horenttxt.value = ""
+            edit_horsalttxt.value = ""
             edit_esttxt.value = "A", Dropdown(
             label="Estado de Registro",
             value="A",
@@ -119,7 +87,7 @@ def main(page: Page):
     # Inactivar registro
     def inactbtn(e):
         try:
-            sql = "UPDATE RENTA SET RenEstReg = %s WHERE RenCod = %s"
+            sql = "UPDATE TURNO_ADMINISTRADOR SET TurAdmEstReg = %s WHERE TurAdmCod = %s"
             val = ('I', edit_codtxt.value)
             cursor.execute(sql, val)
             mydb.commit()
@@ -145,15 +113,9 @@ def main(page: Page):
         try:
             dialog.open = False
             page.update()
-            # Limipiar campos
-            # Limipiar campos
-            edit_rentatxt.value = ""
-            edit_yeartxt.value = ""
-            edit_mestxt.value = ""
-            edit_diatxt.value = ""
-            edit_year2txt.value = ""
-            edit_mes2txt.value = ""
-            edit_dia2txt.value = ""
+            # Limpiar campos
+            edit_horenttxt.value = ""
+            edit_horsalttxt.value = ""
             edit_esttxt.value = "A", Dropdown(
             label="Estado de Registro",
             value="A",
@@ -179,13 +141,8 @@ def main(page: Page):
         title=Text("Editar Registro"),
         content=Column([
             edit_codtxt,
-            edit_rentatxt,
-            edit_yeartxt,
-            edit_mestxt,
-            edit_diatxt,
-            edit_year2txt,
-            edit_mes2txt,
-            edit_dia2txt,
+            edit_horenttxt,
+            edit_horsalttxt,
             edit_esttxt]),
         actions=[
             TextButton("Guardar", on_click=savedata),
@@ -195,15 +152,10 @@ def main(page: Page):
 
     #Editar
     def createbtn(e):
-        edit_codtxt.value = e.control.data['RenCod']
-        edit_rentatxt.value = e.control.data['RenHab']
-        edit_yeartxt.value = e.control.data['RenFecIniAño']
-        edit_mestxt.value = e.control.data['RenFecIniMes']
-        edit_diatxt.value = e.control.data['RenFecIniDia']
-        edit_year2txt.value = e.control.data['RenFecFinAño']
-        edit_mes2txt.value = e.control.data['RenFecFinMes']
-        edit_dia2txt.value = e.control.data['RenFecFinDia']
-        edit_esttxt.value = e.control.data['RenEstReg']
+        edit_codtxt.value = e.control.data['TurAdmCod']
+        edit_horenttxt.value = e.control.data['TurAdmHorEnt']
+        edit_horsalttxt.value = e.control.data['TurAdmHorSal']
+        edit_esttxt.value = e.control.data['TurAdmEstReg']
 
         page.dialog = dialog
         dialog.open = True
@@ -212,8 +164,8 @@ def main(page: Page):
     # Activar Registro
     def actbtn(e):
         try:
-            sql = "UPDATE RENTA SET RenEstReg = %s WHERE RenCod = %s"
-            val = ('A', e.control.data['RenCod'])
+            sql = "UPDATE TURNO_ADMINISTRADOR SET TurAdmEstReg = %s WHERE TurAdmCod = %s"
+            val = ('A', e.control.data['TurAdmCod'])
             cursor.execute(sql, val)
             mydb.commit()
             print("Registro Activado")
@@ -235,7 +187,7 @@ def main(page: Page):
     # Eliminado lógico
     def dellog(e):
         try:
-            sql = "UPDATE RENTA SET RenEstReg = %s WHERE RenCod = %s"
+            sql = "UPDATE TURNO_ADMINISTRADOR SET TurAdmEstReg = %s WHERE TurAdmCod = %s"
             val = ('*', e.control.data['RenCod'])
             cursor.execute(sql, val)
             mydb.commit()
@@ -258,7 +210,7 @@ def main(page: Page):
     # Cargar datos
     def load_data():
         # Obtener datos de la bd
-        cursor.execute("SELECT * FROM RENTA")
+        cursor.execute("SELECT * FROM TURNO_ADMINISTRADOR")
         result = cursor.fetchall()
         # Push al diccionario
         columns = [column[0] for column in cursor.description]
@@ -269,15 +221,10 @@ def main(page: Page):
             mydt.rows.append(
                 DataRow(
                     cells=[
-                        DataCell(Text(row['RenCod'])),
-                        DataCell(Text(row['RenHab'])),
-                        DataCell(Text(row['RenFecIniAño'])),
-                        DataCell(Text(row['RenFecIniMes'])),
-                        DataCell(Text(row['RenFecIniDia'])),
-                        DataCell(Text(row['RenFecFinAño'])),
-                        DataCell(Text(row['RenFecFinMes'])),
-                        DataCell(Text(row['RenFecFinDia'])),
-                        DataCell(Text(row['RenEstReg'])),
+                        DataCell(Text(row['TurAdmCod'])),
+                        DataCell(Text(row['TurAdmHorEnt'])),
+                        DataCell(Text(row['TurAdmHorSal'])),
+                        DataCell(Text(row['TurAdmEstReg'])),
                         DataCell(
                             Row(load_icons(row))
                         ),
@@ -288,50 +235,13 @@ def main(page: Page):
             )
             page.update()
 
-    #Buscar datos
-    # #Obtener cod de la bd 
-    # def inputsearch(e):
-    #     # Obtener datos de la bd
-    #     cursor.execute("SELECT * FROM RENTA WHERE RenCod = %s")
-    #     result = cursor.fetchall()
-    #     # Push al diccionario
-    #     columns = [column[0] for column in cursor.description]
-    #     rows = [dict(zip(columns, row)) for row in result]
-
-    #     # Bucle de pusheo
-    #     for row in rows:
-    #         mydt.rows.append(
-    #             DataRow(
-    #                 cells=[
-    #                     DataCell(Text(row['RenCod'])),
-    #                     DataCell(Text(row['RenHab'])),
-    #                     DataCell(Text(row['RenFecIniAño'])),
-    #                     DataCell(Text(row['RenFecIniMes'])),
-    #                     DataCell(Text(row['RenFecIniDia'])),
-    #                     DataCell(Text(row['RenFecFinAño'])),
-    #                     DataCell(Text(row['RenFecFinMes'])),
-    #                     DataCell(Text(row['RenFecFinDia'])),
-    #                     DataCell(Text(row['RenEstReg'])),
-
-    #                     DataCell(
-    #                         Row(load_icons(row))
-    #                     )
-    #                 ]
-    #             )
-    #         )
-    #     page.update()
-
-    # nameinput = TextField(label="Search Código", on_change=inputsearch)
-    # # Si no hay dato
-    # datanotfound = Text("Dato no encontrado...", weight="bold", size=20,)
-    # datanotfound.visible = False
-
+    #Iconos
     def load_icons(row):
-            if (row['RenEstReg'] == 'I'):
+            if (row['TurAdmEstReg'] == 'I'):
                 return [IconButton("check_box", icon_color='green',
                                             data=row,
                                             on_click=actbtn)]
-            elif (row['RenEstReg'] == '*'):
+            elif (row['TurAdmEstReg'] == '*'):
                 return []
 
             return [
@@ -345,12 +255,12 @@ def main(page: Page):
 
 
     #Llamar función cuando la aplicación está abierta
-    
+    load_data()
     #Agregar datos boton
     def addtodb(e):
         try:
-            sql = "INSERT INTO RENTA (RenCod, RenHab, RenFecIniAño, RenFecIniMes, RenFecIniDia, RenFecFinAño, RenFecFinMes, RenFecFinDia) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-            val = (codtxt.value, rentatxt.value, yeartxt.value, mestxt.value, diatxt.value, year2txt.value, mes2txt.value, dia2txt.value, )
+            sql = "INSERT INTO TURNO_ADMINISTRADOR (TurAdmCod, TurAdmHorEnt, TurAdmHorSal) VALUES (%s, %s, %s)"
+            val = (codtxt.value, horenttxt.value, horsalttxt.value,)
             cursor.execute(sql, val)
             mydb.commit()
             print(cursor.rowcount, "You record insert!")
@@ -372,19 +282,8 @@ def main(page: Page):
 
         #Limpiar el texinput
         codtxt.value = ""
-        rentatxt.value = ""
-        yeartxt.value = ""
-        mestxt.value = ""
-        diatxt.value = ""
-        year2txt.value = ""
-        mes2txt.value = ""
-        dia2txt.value = ""
-        # esttxt.value = "A", Dropdown(
-        #     label="Estado de Registro",
-        #     value="A",
-        #     options=[
-        #         dropdown.Option("A"),
-        #     ])
+        horenttxt.value = ""
+        horsalttxt.value = ""
         page.update()
     
     #Cancelar registro
@@ -392,19 +291,9 @@ def main(page: Page):
         try:
             dialog2.open = False
             codtxt.value = ""
-            rentatxt.value = ""
-            yeartxt.value = ""
-            mestxt.value = ""
-            diatxt.value = ""
-            year2txt.value = ""
-            mes2txt.value = ""
-            dia2txt.value = ""
-            # esttxt.value = "A" , Dropdown(
-            # label="Estado de Registro",
-            # value="A",
-            # options=[
-            #     dropdown.Option("A"),
-            # ])
+            horenttxt.value = ""
+            horsalttxt.value = ""
+            page.update()
             
             page.update()
             mydt.rows.clear()
@@ -426,13 +315,8 @@ def main(page: Page):
         title = Text("Ingresar Datos"),
         content = Column([
             codtxt,
-            rentatxt,
-            yeartxt,
-            mestxt,
-            diatxt,
-            year2txt,
-            mes2txt,
-            dia2txt,
+            horenttxt,
+            horsalttxt,
             # esttxt
         ]),
         actions = [
@@ -444,13 +328,8 @@ def main(page: Page):
     #Boton redireccionamiento
     def AddBtn(e):
         codtxt.value = ""
-        rentatxt.value = ""
-        yeartxt.value = ""
-        mestxt.value = ""
-        diatxt.value = ""
-        year2txt.value = ""
-        mes2txt.value = ""
-        dia2txt.value = ""
+        horenttxt.value = ""
+        horsalttxt.value = ""
         # esttxt.value = ""
         page.dialog = dialog2
         dialog2.open = True
@@ -481,18 +360,18 @@ def main(page: Page):
             color = {"":colors.BLACK, "selected":colors.WHITE}
         )
     )
+
     #Salir
     def exit_app(e):
         page.window_destroy()
-        
-    load_data()
+    
     #Main
-    page.title = "Rentas"
+    page.title = "Turno Administrador"
     page.window_height = 1080
     page.window_width = 1600
     page.add(
         AppBar(
-            title = Text("TABLA RENTAS", size = 30),
+            title = Text("TABLA TURNO ADMINISTRADOR", size = 30),
             bgcolor = colors.TEAL,
             actions = [toggledarklight]
         ),
@@ -508,6 +387,7 @@ def main(page: Page):
         ]),
         ft.Divider(),
         Container(mydt, alignment=ft.alignment.center),
+        
     )
     
 ft.app(target=main)
