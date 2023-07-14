@@ -486,8 +486,7 @@ def main(page: Page):
     load_data()
     #Main
     page.title = "Rentas"
-    page.window_height = 1080
-    page.window_width = 1600
+    page.window_maximized = True
     page.add(
         AppBar(
             title = Text("TABLA RENTAS", size = 30),

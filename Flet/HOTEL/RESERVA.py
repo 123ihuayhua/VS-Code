@@ -55,15 +55,15 @@ def main(page: Page):
 
     mydt = DataTable(
         columns=[
-            DataColumn(Text("Código Huesped")),
-            DataColumn(Text("Código Administrador")),
-            DataColumn(Text("Código Habitación")),
-            DataColumn(Text("Fecha Entrada Año")),
-            DataColumn(Text("Fecha Entrada Mes")),
-            DataColumn(Text("Fecha Entrada Dia")),
-            DataColumn(Text("Fecha Salida Año")),
-            DataColumn(Text("Fecha Salida Mes")),
-            DataColumn(Text("Fecha Salida Dia")),
+            DataColumn(Text("Huesped")),
+            DataColumn(Text("Administrador")),
+            DataColumn(Text("Habitación")),
+            DataColumn(Text("Año E.")),
+            DataColumn(Text("Mes E.")),
+            DataColumn(Text("Dia E.")),
+            DataColumn(Text("Año S.")),
+            DataColumn(Text("Mes S.")),
+            DataColumn(Text("Dia S.")),
             DataColumn(Text("Estado Reserva")),
             DataColumn(Text("Estado de Registro")),
             DataColumn(Text("Acciones")),
@@ -184,7 +184,8 @@ def main(page: Page):
             edit_fecsalmes,
             edit_fecsaldia,
             edit_resest,
-            edit_esttxt]),
+            edit_esttxt],
+            scroll=ft.ScrollMode.ALWAYS),
         actions=[
             TextButton("Guardar", on_click=savedata),
             TextButton("Cancelar", on_click=cancelform),
@@ -392,7 +393,8 @@ def main(page: Page):
             fecsaldia,
             resest,
             # esttxt
-        ]),
+        ],
+        scroll=ft.ScrollMode.ALWAYS),
         actions = [
             TextButton("AGREGAR", on_click=addtodb),
             TextButton("CANCELAR", on_click=cancelIn),
@@ -448,8 +450,7 @@ def main(page: Page):
     
     #Main
     page.title = "RESERVA"
-    page.window_height = 1080
-    page.window_width = 1600
+    page.window_maximized = True
     page.add(
         AppBar(
             title = Text("TABLA RESERVA", size = 30),

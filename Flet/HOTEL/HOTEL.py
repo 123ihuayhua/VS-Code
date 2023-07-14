@@ -400,8 +400,7 @@ def main(page: Page):
     
     #Main
     page.title = "HOTEL"
-    page.window_height = 1080
-    page.window_width = 1600
+    page.window_maximized = True
     page.add(
         AppBar(
             title = Text("TABLA HOTEL", size = 30),

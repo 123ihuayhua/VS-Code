@@ -185,7 +185,8 @@ def main(page: Page):
             edit_preuni,
             edit_procan,
             edit_estpro,
-            edit_esttxt]),
+            edit_esttxt],
+            scroll=ft.ScrollMode.ALWAYS),
         actions=[
             TextButton("Guardar", on_click=savedata),
             TextButton("Cancelar", on_click=cancelform),
@@ -393,7 +394,8 @@ def main(page: Page):
             procan,
             estpro,
             # esttxt
-        ]),
+        ],
+        scroll=ft.ScrollMode.ALWAYS),
         actions = [
             TextButton("AGREGAR", on_click=addtodb),
             TextButton("CANCELAR", on_click=cancelIn),
@@ -449,8 +451,7 @@ def main(page: Page):
     
     #Main
     page.title = "CONSUMO"
-    page.window_height = 1080
-    page.window_width = 1600
+    page.window_maximized = True
     page.add(
         AppBar(
             title = Text("TABLA CONSUMO", size = 30),

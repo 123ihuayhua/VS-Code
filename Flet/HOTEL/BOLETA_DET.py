@@ -203,7 +203,8 @@ def main(page: Page):
             edit_boldescat,
             edit_rent,
             edit_total,
-            edit_esttxt]),
+            edit_esttxt],
+            scroll=ft.ScrollMode.ALWAYS),
         actions=[
             TextButton("Guardar", on_click=savedata),
             TextButton("Cancelar", on_click=cancelform),
@@ -395,7 +396,7 @@ def main(page: Page):
     
     # Cuadro de diálogo Ingresar datos
     dialog2 = AlertDialog(
-        StadiumBorder,
+        RoundedRectangleBorder,
         title = Text("Ingresar Datos"),
         content = Column([
             codtxt,
@@ -411,7 +412,8 @@ def main(page: Page):
             rent,
             total,
             # esttxt
-        ]),
+        ],
+        scroll=ft.ScrollMode.ALWAYS),
         actions = [
             TextButton("AGREGAR", on_click=addtodb),
             TextButton("CANCELAR", on_click=cancelIn),
@@ -470,8 +472,7 @@ def main(page: Page):
     
     #Main
     page.title = "BOLETA DETALLE"
-    page.window_height = 1080
-    page.window_width = 1600
+    page.window_maximized = True
     page.add(
         AppBar(
             title = Text("TABLA BOLETA DETALLE", size = 30),
