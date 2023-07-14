@@ -62,7 +62,7 @@ def main(page: Page):
     def savedata(e):
         try:
             sql = "UPDATE HUESPED SET HueDNI = %s, HueApePat = %s, HueApeMat = %s, HueNom = %s, HuerTel = %s, HueEstReg = %s WHERE HueCod = %s"
-            val = (edit_dnittxt.value, edit_apepattxt, edit_apemattxt, edit_nomttxt.value, edit_teltxt.value, edit_esttxt.value,  edit_codtxt.value)
+            val = (edit_dnittxt.value, edit_apepattxt.value, edit_apemattxt.value, edit_nomttxt.value, edit_teltxt.value, edit_esttxt.value,  edit_codtxt.value)
             cursor.execute(sql, val)
             mydb.commit()
             print("Edición exitosa!")
@@ -73,7 +73,7 @@ def main(page: Page):
             edit_dnittxt.value = ""
             edit_apepattxt.value = ""
             edit_apemattxt.value = ""
-            edit_nomttxt = ""
+            edit_nomttxt.value = ""
             edit_teltxt.value = ""
             edit_esttxt.value = "A", Dropdown(
             label="Estado de Registro",

@@ -20,21 +20,20 @@ def main(page: Page):
     page.scroll = "always"
     page.update()
     # Agregar HOTEL
-    codtxt = TextField(label="Código") 
-    ructxt = TextField(label="RUC")
-    nomhottxt = TextField(label="Nombre Hotel")  
-    apepattxt = TextField(label="Apellido Paterno Dueño") 
-    apemattxt = TextField(label="Apellido Materno Dueño")  
-    nomtxt = TextField(label="Nombre Dueño")  
+    cod = TextField(label="Código") 
+    ruc = TextField(label="RUC")
+    nomhot = TextField(label="Nombre Hotel")  
+    apepat = TextField(label="Apellido Paterno Dueño") 
+    apemat = TextField(label="Apellido Materno Dueño")  
+    nom = TextField(label="Nombre Dueño")  
 
     # Editar
-    edit_codtxt = TextField(label="Código", disabled=True)
-    edit_ructxt = TextField(label="RUC")  
-    edit_nomhottxt = TextField(label="Nombre Hotel")  
-    edit_apepattxt = TextField(label="Apellido Paterno Dueño")  
-    edit_apemattxt = TextField(label="Apellido Materno Dueño")  
-    # edit_nomdue = TextField(label="Nombre Dueño")
-    edit_nombredue = TextField(label="Nombre Dueño")
+    edit_cod = TextField(label="Código", disabled=True)
+    edit_ruc = TextField(label="RUC")  
+    edit_nomhot = TextField(label="Nombre Hotel")  
+    edit_apepat = TextField(label="Apellido Paterno Dueño")  
+    edit_apemat = TextField(label="Apellido Materno Dueño")  
+    edit_nom = TextField(label="Nombre Dueño")
     edit_esttxt = Dropdown(
             label="Estado de Registro",
             disabled=True,
@@ -63,7 +62,7 @@ def main(page: Page):
     def savedata(e):
         try:
             sql = "UPDATE HOTEL SET HotRUC = %s, HotNom = %s, HotApePatDue = %s, HotApeMatDue = %s, HotNomDue = %s, HotEstReg = %s WHERE HotCod = %s"
-            val = (edit_ructxt.value, edit_nomhottxt.value, edit_apepattxt.value, edit_apemattxt.value, edit_nombredue.value, edit_esttxt.value, edit_codtxt.value)
+            val = (edit_ruc.value, edit_nomhot.value, edit_apepat.value, edit_apemat.value, edit_nom.value, edit_esttxt.value, edit_cod.value)
             cursor.execute(sql, val)
             mydb.commit()
             print("Edición exitosa!")
@@ -71,11 +70,11 @@ def main(page: Page):
             page.update()
 
             # Limipiar campos
-            edit_ructxt.value = ""
-            edit_nomhottxt.value = ""
-            edit_apepattxt.value = ""
-            edit_apemattxt.value = ""
-            edit_nombredue = ""
+            edit_ruc.value = ""
+            edit_nomhot.value = ""
+            edit_apepat.value = ""
+            edit_apemat.value = ""
+            edit_nom.value = ""
             edit_esttxt.value = "A", Dropdown(
             label="Estado de Registro",
             value="A",
@@ -100,7 +99,7 @@ def main(page: Page):
     def inactbtn(e):
         try:
             sql = "UPDATE HOTEL SET HotEstReg = %s WHERE HotCod = %s"
-            val = ('I', edit_codtxt.value)
+            val = ('I', edit_cod.value)
             cursor.execute(sql, val)
             mydb.commit()
             print("Registro Inactivado")
@@ -126,11 +125,11 @@ def main(page: Page):
             dialog.open = False
             page.update()
             # Limpiar campos
-            edit_ructxt.value = ""
-            edit_nomhottxt.value = ""
-            edit_apepattxt.value = ""
-            edit_apemattxt.value = ""
-            edit_nombredue.value = ""
+            edit_ruc.value = ""
+            edit_nomhot.value = ""
+            edit_apepat.value = ""
+            edit_apemat.value = ""
+            edit_nom.value = ""
             edit_esttxt.value = "A", Dropdown(
             label="Estado de Registro",
             value="A",
@@ -155,12 +154,12 @@ def main(page: Page):
     dialog = AlertDialog(
         title=Text("Editar Registro"),
         content=Column([
-            edit_codtxt,
-            edit_ructxt,
-            edit_nomhottxt,
-            edit_apepattxt,
-            edit_apemattxt,
-            edit_nombredue,
+            edit_cod,
+            edit_ruc,
+            edit_nomhot,
+            edit_apepat,
+            edit_apemat,
+            edit_nom,
             edit_esttxt]),
         actions=[
             TextButton("Guardar", on_click=savedata),
@@ -170,12 +169,12 @@ def main(page: Page):
 
     #Editar
     def createbtn(e):
-        edit_codtxt.value = e.control.data['HotCod']
-        edit_ructxt.value = e.control.data['HotRUC']
-        edit_nomhottxt.value = e.control.data['HotNom']
-        edit_apepattxt.value = e.control.data['HotApePatDue']
-        edit_apemattxt.value = e.control.data['HotApeMatDue']
-        edit_nombredue.value = e.control.data['HotNomDue']
+        edit_cod.value = e.control.data['HotCod']
+        edit_ruc.value = e.control.data['HotRUC']
+        edit_nomhot.value = e.control.data['HotNom']
+        edit_apepat.value = e.control.data['HotApePatDue']
+        edit_apemat.value = e.control.data['HotApeMatDue']
+        edit_nom.value = e.control.data['HotNomDue']
         edit_esttxt.value = e.control.data['HotEstReg']
 
         page.dialog = dialog
@@ -282,7 +281,7 @@ def main(page: Page):
     def addtodb(e):
         try:
             sql = "INSERT INTO HOTEL (HotCod, HotRUC, HotNom, HotApePatDue, HotApeMatDue, HotNomDue) VALUES (%s, %s, %s, %s, %s, %s)"
-            val = (codtxt.value, ructxt.value, nomhottxt.value, apepattxt.value, apemattxt.value, nomtxt.value,)
+            val = (cod.value, ruc.value, nomhot.value, apepat.value, apemat.value, nom.value,)
             cursor.execute(sql, val)
             mydb.commit()
             print(cursor.rowcount, "You record insert!")
@@ -303,24 +302,24 @@ def main(page: Page):
             print("Error en el código")
 
         #Limpiar el texinput
-        codtxt.value = ""
-        ructxt.value = ""
-        nomhottxt.value = ""
-        apepattxt.value = ""
-        apemattxt.value = ""
-        nomtxt.value = ""
+        cod.value = ""
+        ruc.value = ""
+        nomhot.value = ""
+        apepat.value = ""
+        apemat.value = ""
+        nom.value = ""
         page.update()
     
     #Cancelar registro
     def cancelIn(e):
         try:
             dialog2.open = False
-            codtxt.value = ""
-            ructxt.value = ""
-            nomhottxt.value = ""
-            apepattxt.value = ""
-            apemattxt.value = ""
-            nomtxt.value = ""
+            cod.value = ""
+            ruc.value = ""
+            nomhot.value = ""
+            apepat.value = ""
+            apemat.value = ""
+            nom.value = ""
             page.update()
             
             page.update()
@@ -342,12 +341,12 @@ def main(page: Page):
         StadiumBorder,
         title = Text("Ingresar Datos"),
         content = Column([
-            codtxt,
-            ructxt,
-            nomhottxt,
-            apepattxt,
-            apemattxt,
-            nomtxt,
+            cod,
+            ruc,
+            nomhot,
+            apepat,
+            apemat,
+            nom,
             # esttxt
         ]),
         actions = [
@@ -358,12 +357,12 @@ def main(page: Page):
 
     #Boton redireccionamiento
     def AddBtn(e):
-        codtxt.value = ""
-        ructxt.value = ""
-        nomhottxt.value = ""
-        apepattxt.value = ""
-        apemattxt.value = ""
-        nomtxt.value = ""
+        cod.value = ""
+        ruc.value = ""
+        nomhot.value = ""
+        apepat.value = ""
+        apemat.value = ""
+        nom.value = ""
         # esttxt.value = ""
         page.dialog = dialog2
         dialog2.open = True
