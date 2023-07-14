@@ -404,6 +404,12 @@ def main(page: Page):
             bolfecentaño,
             bolfecentmes,
             bolfecentdia,
+            bolfecsalaño,
+            bolfecsalmes,
+            bolfecsaldia,
+            boldescat,
+            rent,
+            total,
             # esttxt
         ]),
         actions = [
